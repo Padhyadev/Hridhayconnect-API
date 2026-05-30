@@ -72,8 +72,11 @@ namespace Hridhayconnect.Infra
 
 
 		public static long JwtUserId => Convert.ToInt64(AppHttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-        public static long JwtRoleId => Convert.ToInt64(AppHttpContext?.User?.FindFirst("RoleId")?.Value ?? "0");
-
+		public static long JwtRoleId => Convert.ToInt64(AppHttpContext?.User?.FindFirst("RoleId")?.Value ?? "0");
+        public static long CustomerId =>
+            Convert.ToInt64(
+                AppHttpContext?.User?.FindFirst("CustomerId")?.Value ?? "0"
+            );
         public static string JwtUserName =>
 			AppHttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value ?? "";
 

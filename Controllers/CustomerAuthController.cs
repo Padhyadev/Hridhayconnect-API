@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ChangePasswordRequest = Hridhayconnect.DTO.ChangePasswordRequest;
 using LoginRequest = Hridhayconnect.DTO.LoginRequest;
 
 namespace Hridhayconnect.Controllers
@@ -85,11 +86,15 @@ namespace Hridhayconnect.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, customerId.ToString()),
+            //var claims = new[]
+            //{
+            //    new Claim(ClaimTypes.NameIdentifier, customerId.ToString()),
 
-             };
+            // };
+            var claims = new[]
+{
+    new Claim("CustomerId", customerId.ToString())
+};
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
@@ -307,6 +312,69 @@ namespace Hridhayconnect.Controllers
                     CommonViewModel.IsSuccess = false;
                     CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
                     CommonViewModel.Message = data?.Message ?? "Invalid otp";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.OldPassword))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Old Password is required";
+
+                    return Ok(CommonViewModel);
+                }
+                if (string.IsNullOrEmpty(request.NewPassword))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "New Password is required";
+
+                    return Ok(CommonViewModel);
+                }
+                if (string.IsNullOrEmpty(request.ConfirmPassword))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Confirm Password is required";
+
+                    return Ok(CommonViewModel);
+                }
+                if (request.NewPassword != request.ConfirmPassword)
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Passwords do not match.";
+
+                    return Ok(CommonViewModel);
+                }
+                var data = await _repository.ChangePassword(request);
+
+                if (data != null && data.Status == 1)
+                {
+                    CommonViewModel.IsSuccess = true;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.Message = data.Message;
+
+                }
+                else
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
+                    CommonViewModel.Message = data?.Message ?? "Invalid Email or Mobile No";
                 }
             }
             catch (Exception ex)

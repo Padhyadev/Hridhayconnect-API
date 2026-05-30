@@ -5,6 +5,8 @@ using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using ChangePasswordRequest = Hridhayconnect.DTO.ChangePasswordRequest;
+using ChangePasswordResult = Hridhayconnect.DTO.ChangePasswordResult;
 using DropdownModel = Hridhayconnect.DTO.DropdownModel;
 using LoginRequest = Hridhayconnect.DTO.LoginRequest;
 using LoginResult = Hridhayconnect.DTO.LoginResult;
@@ -438,6 +440,42 @@ namespace Hridhayconnect.ServiceRepository.HomeRepository
 
                         result.Data = dict;
                     }
+                }
+
+                return await Task.FromResult(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ChangePasswordResult> ChangePassword(ChangePasswordRequest request)
+        {
+            try
+            {
+                ChangePasswordResult result = new ChangePasswordResult();
+                var CustomerId = AppHttpContextAccessor.CustomerId;
+                var OldPassword = Common.Encrypt(request.OldPassword);
+                var NewPassword = Common.Encrypt(request.NewPassword);
+                var oParams = new List<SqlParameter>()
+
+                {
+                    new SqlParameter("@UserId", CustomerId),
+                    new SqlParameter("@OldPassword", OldPassword),
+                    new SqlParameter("@NewPassword", NewPassword)
+                };
+
+                DataTable dt = DataContext.ExecuteStoredProcedure_DataTable("SP_ChangePassword", oParams);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    var row = dt.Rows[0];
+
+                    result.Status = Convert.ToInt32(row["Status"]);
+                    result.Message = row["Message"].ToString();
+
+
                 }
 
                 return await Task.FromResult(result);

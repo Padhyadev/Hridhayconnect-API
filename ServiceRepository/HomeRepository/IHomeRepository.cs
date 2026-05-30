@@ -15,5 +15,7 @@ namespace Hridhayconnect.ServiceRepository.HomeRepository
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> Register(Customer obj);
         Task<(bool IsSuccess, string Message, long Id, List<Dictionary<string, object>> Data)> SaveCart(CartRequest obj);
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> RemoveCart(long id);
+        // New Add
+        Task<ChangePasswordResult?> ChangePassword(ChangePasswordRequest request);
     }
 }

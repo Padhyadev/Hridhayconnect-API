@@ -5,6 +5,7 @@ using Hridhayconnect.ServiceRepository.CategoryRepository;
 using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
 using Hridhayconnect.ServiceRepository.CouponRepository;
 using Hridhayconnect.ServiceRepository.CustomerRepository;
+using Hridhayconnect.ServiceRepository.DashboardRepository;
 using Hridhayconnect.ServiceRepository.HomeRepository;
 using Hridhayconnect.ServiceRepository.LovRepository;
 using Hridhayconnect.ServiceRepository.MenuAccessRepository;
@@ -114,6 +115,7 @@ builder.Services.AddScoped<ICartRepository,CartRepository>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ICouponRepository,CouponRepository>();
 builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
+builder.Services.AddScoped<IDashboardRepository,DashboardRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 

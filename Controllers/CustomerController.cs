@@ -1,0 +1,123 @@
+﻿using Hridhayconnect.Infra;
+using Hridhayconnect.Models;
+using Hridhayconnect.ServiceRepository.CustomerRepository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Hridhayconnect.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
+    {
+        private readonly ICustomerRepository _repository;
+        private readonly ApiResponseModel CommonViewModel = new();
+
+        public CustomerController(ICustomerRepository repository)
+        {
+            _repository = repository;
+        }
+        
+        // When pass customer Id Here we get 5 Tables
+        //1. Customer basic Information
+        //2.Customer Adress
+        //3.Customer cart Datailes 
+        //4.Customer Oder Listing
+        //5.Customer Order datiles
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> GetAll(ReviewPagingRequest request)
+        {
+            try
+            {
+                var data = await _repository.GetAllCustomer(request);
+
+                CommonViewModel.IsSuccess = true;
+                CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                CommonViewModel.Message = "Data retrieved successfully";
+                CommonViewModel.Data = data;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpGet("[Action]")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var data = await _repository.GetCustomerById(id);
+
+                if (data != null)
+                {
+                    CommonViewModel.IsSuccess = true;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.Message = "Data retrieved successfully";
+                    CommonViewModel.Data = data;
+                }
+                else
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
+                    CommonViewModel.Message = "Customer not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> Save(Customer customer)
+        {
+            try
+            {
+                var (IsSuccess, Message, Id, Extra) = await _repository.AddOrUpdateCustomer(customer);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+        [HttpDelete("[Action]")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            try
+            {
+                var (IsSuccess, Message, Id, Extra) = await _repository.RemoveCustomerAddress(id);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+    }
+}

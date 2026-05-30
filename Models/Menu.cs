@@ -8,7 +8,6 @@ namespace Hridhayconnect.Models
     public class Menu : EntityBase
     {
         [Key]
-        public long Id { get; set; }
         public long ParentId { get; set; }
         public string? Area { get; set; }
         public string? Controller { get; set; }

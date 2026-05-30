@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Text;
 
-namespace JewelryStore.Infra
+namespace Hridhayconnect.Infra
 {
 	public static class DataContext
 	{

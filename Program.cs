@@ -1,16 +1,20 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 using Hridhayconnect.Infra;
+using Hridhayconnect.ServiceRepository.AttributeRepository;
+using Hridhayconnect.ServiceRepository.CartRepository;
+using Hridhayconnect.ServiceRepository.CategoryRepository;
+using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
+using Hridhayconnect.ServiceRepository.HomeRepository;
+using Hridhayconnect.ServiceRepository.LovRepository;
 using Hridhayconnect.ServiceRepository.MenuAccessRepository;
 using Hridhayconnect.ServiceRepository.MenuRepository;
 using Hridhayconnect.ServiceRepository.RoleRepository;
 using Hridhayconnect.ServiceRepository.UserRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
-using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
-using Hridhayconnect.ServiceRepository.LovRepository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +106,10 @@ builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IMenuAccessRepo, MenuAccessRepo>();
 builder.Services.AddScoped<IChangePasswordRepository, ChangePasswordRepository>();
 builder.Services.AddScoped<ILovRepository, LovRepository>();
+builder.Services.AddScoped<IAttibuteRepository,AttributeRepository>();
+builder.Services.AddScoped<IHomeRepository,HomeRepository>();
+builder.Services.AddScoped<ICartRepository,CartRepository>();
+builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 

@@ -1,6 +1,5 @@
 ﻿using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
-using JewelryStore.Infra;
 using Microsoft.Data.SqlClient;
 using System.Data;
 

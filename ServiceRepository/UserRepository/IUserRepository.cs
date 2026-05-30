@@ -1,10 +1,7 @@
 ﻿
 using Hridhayconnect.Infra;
-using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
-using JewelryStore.Infra;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Hridhayconnect.ServiceRepository.UserRepository
 {

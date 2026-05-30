@@ -1,4 +1,4 @@
-﻿namespace JewelryStore.Infra
+﻿namespace Hridhayconnect.Infra
 {
     public class PagingRequest
     {

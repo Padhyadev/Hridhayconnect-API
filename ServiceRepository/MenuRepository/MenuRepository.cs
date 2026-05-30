@@ -1,11 +1,6 @@
 ﻿using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
-using Hridhayconnect.ServiceRepository.MenuRepository;
-using JewelryStore.Infra;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Data;
 
 namespace Hridhayconnect.ServiceRepository.MenuRepository

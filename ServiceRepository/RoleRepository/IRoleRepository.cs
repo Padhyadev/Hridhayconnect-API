@@ -2,8 +2,6 @@
 
 using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
-using JewelryStore.Infra;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Hridhayconnect.ServiceRepository.RoleRepository
 {

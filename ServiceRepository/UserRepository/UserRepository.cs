@@ -1,7 +1,5 @@
 ﻿using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
-using JewelryStore.Infra;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -124,7 +122,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
         new SqlParameter("IsActive", user.IsActive ? 1 : 0),
 
         new SqlParameter("Mode", "SAVE"),
-        new SqlParameter("OperatedBy", 1)
+        new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId)
     };
 
             var result = DataContext.ExecuteStoredProcedure(
@@ -141,7 +139,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
     {
         new SqlParameter("Id", id),
         new SqlParameter("Mode", "DELETE"),
-        new SqlParameter("OperatedBy", 1)
+        new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId)
     };
 
             var result = DataContext.ExecuteStoredProcedure(

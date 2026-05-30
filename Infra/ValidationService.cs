@@ -1,6 +1,4 @@
-﻿
-
-namespace Hridhayconnect.Infra
+﻿namespace Hridhayconnect.Infra
 {
     public class ValidationService
     {

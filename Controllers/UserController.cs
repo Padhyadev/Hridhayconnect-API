@@ -2,7 +2,6 @@
 using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
 using Hridhayconnect.ServiceRepository.UserRepository;
-using JewelryStore.Infra;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;

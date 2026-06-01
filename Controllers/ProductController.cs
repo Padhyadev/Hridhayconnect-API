@@ -136,7 +136,9 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
+        //CHeck it Also Send active-inactive for Show 
         public async Task<IActionResult> Save([FromForm] Product product)
+
         {
             try
             {

@@ -13,6 +13,7 @@ using Hridhayconnect.ServiceRepository.MenuAccessRepository;
 using Hridhayconnect.ServiceRepository.MenuRepository;
 using Hridhayconnect.ServiceRepository.OrdersRepository;
 using Hridhayconnect.ServiceRepository.ProductRepository;
+using Hridhayconnect.ServiceRepository.ProductStockRepository;
 using Hridhayconnect.ServiceRepository.RoleRepository;
 using Hridhayconnect.ServiceRepository.UserRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -122,6 +123,7 @@ builder.Services.AddScoped<IDashboardRepository,DashboardRepository>();
 builder.Services.AddScoped<IInquiryRepository,InquiryRepository>();
 builder.Services.AddScoped<IOrdersRepository,OrdersRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IProductStockRepository,ProductStockRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 

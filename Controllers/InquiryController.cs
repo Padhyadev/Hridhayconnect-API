@@ -1,0 +1,262 @@
+﻿using Hridhayconnect.DTO;
+using Hridhayconnect.Infra;
+using Hridhayconnect.Models;
+using Hridhayconnect.ServiceRepository.InquiryRepository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Hridhayconnect.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class InquiryController : ControllerBase
+    {
+        private readonly IInquiryRepository _repository;
+        private readonly ApiResponseModel CommonViewModel = new();
+
+        public InquiryController(IInquiryRepository repository)
+        {
+            _repository = repository;
+        }
+
+        [HttpPost("[Action]")]
+        //Check it
+        public async Task<IActionResult> GetAll(PagingRequest request)
+        {
+            try
+            {
+                var data = await _repository.GetAllInquires(request);
+
+                CommonViewModel.IsSuccess = true;
+                CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                CommonViewModel.Message = "Data retrieved successfully";
+                CommonViewModel.Data = data;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpGet("[Action]")]
+        //Check it
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var data = await _repository.GetInquiryById(id);
+
+                if (data != null)
+                {
+                    CommonViewModel.IsSuccess = true;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.Message = "Data retrieved successfully";
+                    CommonViewModel.Data = data;
+                }
+                else
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
+                    CommonViewModel.Message = "Category not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+        [HttpGet("[Action]")]
+        //CHeck it
+        public async Task<IActionResult> GetInquryStatusHistory(int id)
+        {
+            try
+            {
+                var data = await _repository.GetInquiryStatusHistory(id);
+
+                if (data != null)
+                {
+                    CommonViewModel.IsSuccess = true;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.Message = "Data retrieved successfully";
+                    CommonViewModel.Data = data;
+                }
+                else
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
+                    CommonViewModel.Message = "Inquiry Status History not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+        [HttpGet("[Action]")]
+        //Check it
+        public async Task<IActionResult> GetInquryConversationHistory(int id)
+        {
+            try
+            {
+                var data = await _repository.GetInquiryRepliedHistory(id);
+
+                if (data != null)
+                {
+                    CommonViewModel.IsSuccess = true;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.Message = "Data retrieved successfully";
+                    CommonViewModel.Data = data;
+                }
+                else
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.NotFound;
+                    CommonViewModel.Message = "Conversation History not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+        [HttpPost("[Action]")]
+        //CHeck it
+        public async Task<IActionResult> Save([FromBody] Inquiries obj)
+        {
+            try
+            {
+
+                if (obj.Inquiry_Date == null)
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Please Select Inquiry_Date.";
+                    return Ok(CommonViewModel);
+                }
+                if (string.IsNullOrEmpty(obj.Name))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Please Enter Name.";
+                    return Ok(CommonViewModel);
+                }
+                if (string.IsNullOrEmpty(obj.Email))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Please Enter Email.";
+                    return Ok(CommonViewModel);
+                }
+                if (!string.IsNullOrWhiteSpace(obj.Email) && !ValidateField.IsValidEmail(obj.Email))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Invalid Email format.";
+                    return Ok(CommonViewModel);
+                }
+                if (!string.IsNullOrWhiteSpace(obj.PhoneNo) && !ValidateField.IsValidMobileNo_D10(obj.PhoneNo))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Please enter valid 10-digit mobile no.";
+                    return Ok(CommonViewModel);
+                }
+                if (string.IsNullOrEmpty(obj.Subject))
+                {
+                    CommonViewModel.IsSuccess = false;
+
+                    CommonViewModel.Message = "Please Enter Subject.";
+                    return Ok(CommonViewModel);
+                }
+
+                if (string.IsNullOrEmpty(obj.Message))
+                {
+                    CommonViewModel.IsSuccess = false;
+
+                    CommonViewModel.Message = "Please Enter Message.";
+                    return Ok(CommonViewModel);
+                }
+
+
+
+                var (IsSuccess, Message, Id, Extra) = await _repository.SaveInquiry(obj);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpPost("[Action]")]
+        //Check it
+        // Check it if status COMP then not null it was
+        public async Task<IActionResult> ChangeStatus([FromBody] ChangeInquiryStatusRequest obj)
+        {
+            try
+            {
+
+                var (IsSuccess, Message, Id, Extra) = await _repository.ChangeStatus(obj.InquiryId, obj.Status, obj.Remarks);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+        [HttpDelete("[Action]")]
+        // CHnage into delete for ISactive=0
+        public async Task<IActionResult> Delete(long id)
+        {
+            try
+            {
+                var (IsSuccess, Message, Id, Extra) = await _repository.DeleteInquiries(id);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+    }
+}

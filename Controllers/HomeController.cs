@@ -49,7 +49,7 @@ namespace Hridhayconnect.Controllers
             return Ok(CommonViewModel);
         }
 
-
+        //not using
         [HttpPost("[Action]")]
         public async Task<IActionResult> SaveCart([FromBody] CartRequest obj)
         {
@@ -74,6 +74,7 @@ namespace Hridhayconnect.Controllers
             return Ok(CommonViewModel);
         }
 
+        //not using
         [HttpDelete("[Action]")]
         public async Task<IActionResult> RemoveCart(long id)
         {

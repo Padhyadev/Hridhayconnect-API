@@ -7,9 +7,12 @@ using Hridhayconnect.ServiceRepository.CouponRepository;
 using Hridhayconnect.ServiceRepository.CustomerRepository;
 using Hridhayconnect.ServiceRepository.DashboardRepository;
 using Hridhayconnect.ServiceRepository.HomeRepository;
+using Hridhayconnect.ServiceRepository.InquiryRepository;
 using Hridhayconnect.ServiceRepository.LovRepository;
 using Hridhayconnect.ServiceRepository.MenuAccessRepository;
 using Hridhayconnect.ServiceRepository.MenuRepository;
+using Hridhayconnect.ServiceRepository.OrdersRepository;
+using Hridhayconnect.ServiceRepository.ProductRepository;
 using Hridhayconnect.ServiceRepository.RoleRepository;
 using Hridhayconnect.ServiceRepository.UserRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -116,6 +119,9 @@ builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<ICouponRepository,CouponRepository>();
 builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
 builder.Services.AddScoped<IDashboardRepository,DashboardRepository>();
+builder.Services.AddScoped<IInquiryRepository,InquiryRepository>();
+builder.Services.AddScoped<IOrdersRepository,OrdersRepository>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 

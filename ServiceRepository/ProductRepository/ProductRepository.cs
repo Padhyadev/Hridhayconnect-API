@@ -16,6 +16,7 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
             var oParams = new List<SqlParameter>()
             {
                 new SqlParameter("@Id", request.Id),
+                new SqlParameter("@CustomerId",AppHttpContextAccessor.CustomerId > 0 ? AppHttpContextAccessor.CustomerId : 0),
                 new SqlParameter("@CategoryId", request.CategoryId),
                 new SqlParameter("@Search", request.Search),
                 new SqlParameter("@Start", request.Start),

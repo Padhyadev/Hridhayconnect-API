@@ -2,6 +2,7 @@
 using Hridhayconnect.Models;
 using Hridhayconnect.ServiceRepository.OrdersRepository;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Hridhayconnect.Controllers
 {
@@ -107,6 +108,52 @@ namespace Hridhayconnect.Controllers
         {
             try
             {
+                if (obj.Id > 0)
+                {
+                    var data = await _repository.GetOrderById(obj.Id);
+
+                    if (obj.OrderStatus != data.OrderStatus)
+                    {
+                        // Get latest status name from LOV
+                        var newStatus = obj.OrderStatusName;
+
+                        // Product Names
+                        string productNames = "";
+
+                        if (data.ListOrderItems != null && data.ListOrderItems.Any())
+                        {
+                            productNames = string.Join(", ",
+                                data.ListOrderItems.Select(x => x.ProductName));
+                        }
+
+                        // TODO:
+                        // Get Customer Email from Order/Customer table
+                        string customerEmail = data.CustomerEmail;
+                        string customerName = data.CustomerName;
+
+                        await Common.SendEmail(
+                            $"Order Status Updated - {data.OrderNumber}",
+                            customerEmail,
+                            true,
+                            "",
+                            "order_status_change",
+                            JsonConvert.SerializeObject(new
+                            {
+                                customername = customerName,
+                                orderno = data.OrderNumber,
+                                productname = productNames,
+                                status = newStatus
+                            })
+                        );
+                    }
+                   
+                    
+
+                }
+                else
+                {
+
+                }
                 if (obj.ListOrderItems == null || !obj.ListOrderItems.Any())
                 {
                     CommonViewModel.IsSuccess = false;
@@ -130,11 +177,7 @@ namespace Hridhayconnect.Controllers
                 }
 
                 // Check duplicate VariantId
-                var duplicateVariants = validItems
-                    .GroupBy(x => x.VariantId)
-                    .Where(g => g.Count() > 1)
-                    .Select(g => g.Key)
-                    .ToList();
+                var duplicateVariants = validItems.GroupBy(x => x.VariantId).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
 
                 if (duplicateVariants.Any())
                 {

@@ -113,10 +113,8 @@ new SqlParameter("@SortDirection", request.SortDirection)
         new SqlParameter("Id", user.Id),
         new SqlParameter("RoleId", user.RoleId),
         new SqlParameter("UserName", user.UserName),
-        new SqlParameter("Password",
-            string.IsNullOrEmpty(user.Password)
-            ? DBNull.Value
-            : Common.Encrypt(user.Password)),
+        new SqlParameter("Email", user.Email),
+        new SqlParameter("Password",string.IsNullOrEmpty(user.Password)? DBNull.Value: Common.Encrypt(user.Password)),
         new SqlParameter("FirstName", user.FirstName),
         new SqlParameter("LastName", user.LastName),
         new SqlParameter("IsActive", user.IsActive ? 1 : 0),
@@ -369,7 +367,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
                     new SqlParameter("@Email", email)
                 };
 
-                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_ForgotPassword_GenerateOTP", oParams);
+                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_User_ForgotPassword_GenerateOTP", oParams);
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -410,7 +408,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
                     new SqlParameter("@OTP", otp)
                 };
 
-                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_ForgotPassword_VerifyOTP", oParams);
+                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_User_ForgotPassword_VerifyOTP", oParams);
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -453,7 +451,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
                     new SqlParameter("@NewPassword", Password)
                 };
 
-                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_ForgotPassword_ResetPassword", oParams);
+                DataTable dt = _repositoryBase.ExecuteStoredProcedureDataTable("SP_User_ForgotPassword_ResetPassword", oParams);
 
                 if (dt != null && dt.Rows.Count > 0)
                 {

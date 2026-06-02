@@ -42,6 +42,7 @@ namespace Hridhayconnect.Models
         public int? Rating { get; set; }
         public string ReviewText { get; set; }
         public bool? IsApproved { get; set; }
+        public bool IsActive { get; set; }
 
         [NotMapped] public string ProductName { get; set; }
 

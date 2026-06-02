@@ -1,4 +1,5 @@
 ﻿using Hridhayconnect.Infra;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hridhayconnect.Models
 {
@@ -13,10 +14,15 @@ namespace Hridhayconnect.Models
         public decimal? FinalAmount { get; set; }
 
         public string OrderStatus { get; set; }
+
         public string PaymentStatus { get; set; }
         public bool IsActive { get; set; }
 
         public List<OrderItems> ListOrderItems { get; set; }
+        [NotMapped] public string? OrderStatusName { get; set; }
+       [NotMapped] public string? CustomerName { get; set; } // for Email
+
+        [NotMapped] public string? CustomerEmail { get; set; } //// for Email
     }
 
     public class OrderItems : EntityBase

@@ -199,7 +199,7 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
                 oParams.Add(new SqlParameter("OrderItems", order_items_table));
                 oParams.Add(new SqlParameter("IsActive", obj.IsActive ? 1 : 0));
                 oParams.Add(new SqlParameter("Mode", "SAVE"));
-                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId));
+                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.CustomerId));
 
                 var result = DataContext.ExecuteStoredProcedure("SP_Orders_Save", oParams, true);
 
@@ -230,6 +230,79 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
             catch
             {
                 throw;
+            }
+        }
+
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatus(List<int> ids, string status)
+        {
+            try
+            {
+                DataTable orderItemsTable = new DataTable();
+
+                orderItemsTable.Columns.Add("VariantId", typeof(int));
+                orderItemsTable.Columns.Add("Quantity", typeof(int));
+                orderItemsTable.Columns.Add("UnitPrice", typeof(decimal));
+                orderItemsTable.Columns.Add("TotalPrice", typeof(decimal));
+
+                List<SqlParameter> oParams = new List<SqlParameter>();
+
+                oParams.Add(new SqlParameter("Id", DBNull.Value));
+                oParams.Add(new SqlParameter("OrderNumber", string.Join(",", ids)));
+                oParams.Add(new SqlParameter("OrderDate", DBNull.Value));
+                oParams.Add(new SqlParameter("TotalAmount", DBNull.Value));
+                oParams.Add(new SqlParameter("DiscountAmount", DBNull.Value));
+                oParams.Add(new SqlParameter("FinalAmount", DBNull.Value));
+                oParams.Add(new SqlParameter("OrderItems", orderItemsTable));
+                oParams.Add(new SqlParameter("IsActive", DBNull.Value));
+                oParams.Add(new SqlParameter("NewStatus", status ?? (object)DBNull.Value));
+                oParams.Add(new SqlParameter("Mode", "STATUS"));
+                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId));
+
+                return await Task.Run(() =>
+                    DataContext.ExecuteStoredProcedure(
+                        "SP_Orders_Save",
+                        oParams,
+                        true
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, 0, new List<string>());
+            }
+        }
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatusNew(int Id, string status)
+        {
+            try
+            {
+               
+              //  orderItemsTable.Columns.Add("TotalPrice", typeof(decimal));
+
+                List<SqlParameter> oParams = new List<SqlParameter>();
+
+                oParams.Add(new SqlParameter("Id", Id));
+                oParams.Add(new SqlParameter("OrderNumber", DBNull.Value));
+                oParams.Add(new SqlParameter("OrderDate", DBNull.Value));
+                oParams.Add(new SqlParameter("TotalAmount", DBNull.Value));
+                oParams.Add(new SqlParameter("DiscountAmount", DBNull.Value));
+                oParams.Add(new SqlParameter("FinalAmount", DBNull.Value));
+          //      oParams.Add(new SqlParameter("OrderItems", orderItemsTable));
+                oParams.Add(new SqlParameter("IsActive", DBNull.Value));
+                oParams.Add(new SqlParameter("NewStatus", status ?? (object)DBNull.Value));
+                oParams.Add(new SqlParameter("Mode", "STATUS2"));
+                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId));
+
+                return await Task.Run(() =>
+                    DataContext.ExecuteStoredProcedure(
+                        "SP_Orders_Save",
+                        oParams,
+                        true
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message, 0, new List<string>());
             }
         }
     }

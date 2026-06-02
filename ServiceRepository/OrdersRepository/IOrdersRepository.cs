@@ -15,5 +15,8 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> SaveOrder(Orders product);
 
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> DeleteOrder(long id);
+
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatus(List<int> ids, string status);
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatusNew(int Id, string status); 
     }
 }

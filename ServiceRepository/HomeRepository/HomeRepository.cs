@@ -124,6 +124,9 @@ namespace Hridhayconnect.ServiceRepository.HomeRepository
 
                 oParams.Add(new SqlParameter("PostalCode", obj.PostalCode));
                 oParams.Add(new SqlParameter("Country", obj.Country));
+                oParams.Add( new SqlParameter("ReferralCode",string.IsNullOrEmpty(obj.ReferralCode)? (object)DBNull.Value: obj.ReferralCode
+    )
+);
 
                 oParams.Add(new SqlParameter("IsActive", obj.IsActive ? 1 : 0));
                 oParams.Add(new SqlParameter("Mode", "SAVE"));

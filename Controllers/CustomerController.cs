@@ -17,8 +17,8 @@ namespace Hridhayconnect.Controllers
         {
             _repository = repository;
         }
-        
-        // When pass customer Id Here we get 5 Tables
+
+        // When pass customer Id Here we get 5 Tables SP_Customer_Get
         //1. Customer basic Information
         //2.Customer Adress
         //3.Customer cart Datailes 
@@ -78,6 +78,7 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
+        //PASS ADRESS TYPE HOME OR SHIPPING
         public async Task<IActionResult> Save(Customer customer)
         {
             try
@@ -104,6 +105,28 @@ namespace Hridhayconnect.Controllers
             try
             {
                 var (IsSuccess, Message, Id, Extra) = await _repository.RemoveCustomerAddress(id);
+
+                CommonViewModel.IsSuccess = IsSuccess;
+                CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;
+                CommonViewModel.Message = Message;
+                CommonViewModel.Data = Id;
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+            }
+
+            return Ok(CommonViewModel);
+        }
+
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> ChangeDefaultAddress(int CustomerAddressId)
+        {
+            try
+            {
+                var (IsSuccess, Message, Id, Extra) = await _repository.ChangeDefaultAddress(CustomerAddressId);
 
                 CommonViewModel.IsSuccess = IsSuccess;
                 CommonViewModel.StatusCode = IsSuccess ? ResponseStatusCode.Success : ResponseStatusCode.Error;

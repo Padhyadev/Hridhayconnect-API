@@ -11,10 +11,13 @@ using Hridhayconnect.ServiceRepository.InquiryRepository;
 using Hridhayconnect.ServiceRepository.LovRepository;
 using Hridhayconnect.ServiceRepository.MenuAccessRepository;
 using Hridhayconnect.ServiceRepository.MenuRepository;
+using Hridhayconnect.ServiceRepository.NotificationRepository;
+using Hridhayconnect.ServiceRepository.OrderRewardSlabRepository;
 using Hridhayconnect.ServiceRepository.OrdersRepository;
 using Hridhayconnect.ServiceRepository.ProductRepository;
 using Hridhayconnect.ServiceRepository.ProductStockRepository;
 using Hridhayconnect.ServiceRepository.ReviewsRepository;
+using Hridhayconnect.ServiceRepository.RewardRepository;
 using Hridhayconnect.ServiceRepository.RoleRepository;
 using Hridhayconnect.ServiceRepository.UserRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,7 +74,11 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CommonForReactAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Hridhayconnect API",
+        Version = "v1"
+    });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -126,10 +133,13 @@ builder.Services.AddScoped<IOrdersRepository,OrdersRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<IProductStockRepository,ProductStockRepository>();
 builder.Services.AddScoped<IReviewsRepository,ReviewsRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IRewardRepository, RewardRepository>();
+builder.Services.AddScoped<IOrderRewardSlabRepository, OrderRewardSlabRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -149,13 +159,16 @@ AppHttpContextAccessor.Configure(
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
-app.UseSwagger(); // for live index
+app.UseSwagger();
+
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommmonProject v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hridhayconnect API V1");
 });
 
+app.MapGet("/", () => Results.Redirect("/swagger")); // check it into live this is working or not 
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 //app.UseAuthorization();

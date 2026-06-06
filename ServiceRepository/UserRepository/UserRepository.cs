@@ -278,7 +278,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
 
                     if (!string.IsNullOrWhiteSpace(email))
                     {
-                        await Common.SendEmail(
+                        await Common.SendEmailwithAttachment(
                             "Your Password",
                             email,
                             true,
@@ -337,7 +337,7 @@ new SqlParameter("@SortDirection", request.SortDirection)
                     {
                         otp = tempPasswordPlain
                     });
-                    await Common.SendEmail(
+                    await Common.SendEmailwithAttachment(
                       "Your Password",
                       idString,
                       true,

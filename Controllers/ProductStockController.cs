@@ -72,6 +72,10 @@ namespace Hridhayconnect.Controllers
             return Ok(CommonViewModel);
         }
 
+  //        "productId": 33,
+  //"variantIds": "151", MUltiple Stock add into here
+  //"changeType": "IN",
+  //"quantity": 1
         [HttpPost("[Action]")]
         public async Task<IActionResult> AdjustStock([FromBody] ProductStockHistory obj)
         {

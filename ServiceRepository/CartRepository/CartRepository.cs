@@ -144,13 +144,17 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
 
             return await Task.FromResult(result);
         }
-        public async Task<(bool IsSuccess, object Data)> Checkout(int customerId, int createdBy)
+        public async Task<(bool IsSuccess, object Data)> Checkout(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,
+    decimal coinDiscountAmount)
         {
             try
             {
                 List<SqlParameter> oParams = new()
         {
             new SqlParameter("@CustomerId", customerId),
+            new SqlParameter("@CustomerAddressId", CustomerAddressId),
+            new SqlParameter("@UsedCoins", usedCoins),
+            new SqlParameter("@CoinDiscountAmount", coinDiscountAmount),
             new SqlParameter("@CreatedBy", createdBy)
         };
 

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Order Placed Successfully</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+       
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #ddd;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .order-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #666;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+   
+
+</head>
+<body>
+    <div class="container">
+        <!--<div style="text-align:center;margin-bottom:20px;">
+        <img src="wwwroot\ProjectIMG\Logo.jpeg"
+             alt="Hridhayconnect"
+             style="max-width:180px;height:auto;" />
+    </div>-->
+
+        <div style="text-align:center;margin-bottom:20px;"> <img src="{{logo}}" alt="Hridhayconnect" style="max-width:180px;height:auto;" /> </div>
+
+
+        <div class="title">
+            🎉 Order Placed Successfully
+        </div>
+
+        <p>Hello <strong>{{customername}}</strong>,</p>
+
+        <p>
+            Thank you for shopping with us. Your order has been placed successfully and is currently being processed.
+        </p>
+
+        <div class="order-box">
+
+            <div class="row">
+                <span class="label">Order Number:</span>
+                {{orderno}}
+            </div>
+
+            <h3>Order Items</h3>
+
+            {{productrows}}
+
+            <div class="row">
+                <span class="label">Total Amount:</span>
+                ₹ {{totalamount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Discount Amount:</span>
+                ₹ {{discountamount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Coin Discount:</span>
+                ₹ {{coindiscountamount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Final Amount:</span>
+                ₹ {{finalamount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Current Status:</span>
+                {{status}}
+            </div>
+
+        </div>
+
+        <p>
+            We will keep you updated as your order progresses through confirmation, shipping, and delivery.
+        </p>
+
+        <p>
+            You can log in to your account at any time to track your order.
+        </p>
+
+        <div class="footer">
+            Thank you for choosing Hridhayconnect.<br />
+            We appreciate your business and look forward to serving you again.
+        </div>
+
+    </div>
+   
+
+</body>
+</html>

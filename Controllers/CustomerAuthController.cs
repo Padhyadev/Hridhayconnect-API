@@ -201,7 +201,7 @@ namespace Hridhayconnect.Controllers
                     var dict = data.Data as IDictionary<string, object>;
                     var newOtp = dict?["OTP"]?.ToString();
 
-                    Common.SendEmail(
+                    Common.SendEmailwithAttachment(
                         "Your OTP Code",
                         request.Email,
                         true,

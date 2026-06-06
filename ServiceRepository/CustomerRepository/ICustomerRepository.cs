@@ -15,5 +15,6 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
         //Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> SaveCategory(Category category);
 
         //Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> DeleteCategory(long id);
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ChangeDefaultAddress(int CustomerAddressId);
     }
 }

@@ -106,6 +106,7 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
+        // This is only for admin not for Customer for customer using checkout into cart
         public async Task<IActionResult> Save(Orders obj)
         {
             try
@@ -166,7 +167,7 @@ namespace Hridhayconnect.Controllers
                         string customerEmail = data.CustomerEmail;
                         string customerName = data.CustomerName;
 
-                        await Common.SendEmail(
+                        await Common.SendEmailwithAttachment(
                             $"Order Status Updated - {data.OrderNumber}",
                             customerEmail,
                             true,
@@ -288,7 +289,7 @@ namespace Hridhayconnect.Controllers
                         string customerEmail = data.CustomerEmail;
                         string customerName = data.CustomerName;
 
-                        await Common.SendEmail(
+                        await Common.SendEmailwithAttachment(
                             $"Order Status Updated - {data.OrderNumber}",
                             customerEmail,
                             true,

@@ -179,8 +179,10 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
             new SqlParameter("@State", customer.State ?? (object)DBNull.Value),
             new SqlParameter("@PostalCode", customer.PostalCode ?? (object)DBNull.Value),
             new SqlParameter("@Country", customer.Country ?? (object)DBNull.Value),
+            new SqlParameter("@MobileNo", customer.MobileNo ?? (object)DBNull.Value),
+            new SqlParameter("@AlternativeMobileNo", customer.AlternativeMobileNo ?? (object)DBNull.Value),
             new SqlParameter("@AddressType", customer.AddressType ?? (object)DBNull.Value),
-              new SqlParameter("@Mode", "SAVE"),
+            new SqlParameter("@Mode", "SAVE"),
             new SqlParameter("@Operated_By", customer.Id == 0 ? customer.CreatedBy : customer.LastModifiedBy)
         };
 
@@ -215,6 +217,32 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ChangeDefaultAddress(int CustomerAddressId)
+        {
+            try
+            {
+                List<SqlParameter> parameters = new()
+        {
+            new SqlParameter("@Id", CustomerAddressId),
+            new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+            new SqlParameter("@Mode", "SETDEFAULT"),
+            new SqlParameter("@Operated_By", AppHttpContextAccessor.CustomerId)
+        };
+
+                var result = DataContext.ExecuteStoredProcedure(
+                    "SP_CustomerAddress_Save",
+                    parameters,
+                    true
+                );
+
+                return await Task.FromResult(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error saving customer address", ex);
             }
         }
 

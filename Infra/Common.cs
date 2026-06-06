@@ -130,10 +130,22 @@ namespace Hridhayconnect.Infra
                             body = reader.ReadToEnd();
                         }
 
+                        string logoUrl = string.Empty;
+
+                        if (AppHttpContextAccessor.AppHttpContext != null)
+                        {
+                            var request = AppHttpContextAccessor.AppHttpContext.Request;
+
+                            logoUrl =
+                                $"{request.Scheme}://{request.Host}/ProjectIMG/Logo.jpeg";
+                        }
+                        body = body.Replace("{{logo}}", logoUrl);
                         if (!string.IsNullOrEmpty(templateData))
                         {
                             JObject data = JObject.Parse(templateData);
+                          
 
+                    
                             foreach (var prop in data.Properties())
                             {
                                 string key = "{{" + prop.Name.ToLower() + "}}";
@@ -147,6 +159,7 @@ namespace Hridhayconnect.Infra
 
 
                                 body = body.Replace(key, value);
+                               
                             }
                         }
 
@@ -318,7 +331,7 @@ namespace Hridhayconnect.Infra
 
                     if (isBodyHtml == true && !string.IsNullOrEmpty(templateFile))
                     {
-                        using (StreamReader reader = new StreamReader(System.IO.Path.Combine(AppHttpContextAccessor.ContentRootPath + "/Content/Email_Templates", templateFile + "_enquiry.html")))
+                        using (StreamReader reader = new StreamReader(System.IO.Path.Combine(AppHttpContextAccessor.WebRootPath, "Email_Templates", templateFile + "_enquiry.html")))
                         {
                             body = reader.ReadToEnd();
                         }
@@ -326,7 +339,7 @@ namespace Hridhayconnect.Infra
                         if (!string.IsNullOrEmpty(templateData))
                         {
                             JObject data = JObject.Parse(templateData);
-
+                            body = body.Replace("{{logo}}", "cid:CompanyLogo");
                             foreach (var prop in data.Properties())
                             {
                                 string key = "{{" + prop.Name.ToLower() + "}}";
@@ -340,6 +353,7 @@ namespace Hridhayconnect.Infra
 
 
                                 body = body.Replace(key, value);
+             
                             }
                         }
 
@@ -351,9 +365,25 @@ namespace Hridhayconnect.Infra
                     {
                         mailMessage.From = new System.Net.Mail.MailAddress(AppHttpContextAccessor.AdminFromMail, AppHttpContextAccessor.DisplayName);
                         mailMessage.Subject = subject;
-                        mailMessage.Body = body;
-                        mailMessage.IsBodyHtml = isBodyHtml;
+                        //mailMessage.Body = body;
+                        //mailMessage.IsBodyHtml = isBodyHtml;
+                       
+ AlternateView htmlView =
+    AlternateView.CreateAlternateViewFromString(body ?? "", null, "text/html");
 
+                        string logoPath = Path.Combine(
+          AppHttpContextAccessor.WebRootPath,
+          "ProjectIMG",
+          "Logo.jpeg"); ;
+
+                        LinkedResource logo = new LinkedResource(logoPath, "image/jpeg");
+                        logo.ContentId = "CompanyLogo";
+                        logo.TransferEncoding = System.Net.Mime.TransferEncoding.Base64;
+
+                        htmlView.LinkedResources.Add(logo);
+
+                        mailMessage.AlternateViews.Add(htmlView);
+                        mailMessage.IsBodyHtml = true;
                         foreach (string item in recipient_mails.Split(",").ToArray())
                             mailMessage.To.Add(new System.Net.Mail.MailAddress(item.Trim()));
                         if (attachfile != null && attachfile.Length > 0)

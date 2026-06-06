@@ -12,6 +12,7 @@ namespace Hridhayconnect.Models
         public decimal? TotalAmount { get; set; }
         public decimal? DiscountAmount { get; set; }
         public decimal? FinalAmount { get; set; }
+        public decimal? CoinDiscountAmount { get; set; }
 
         public string OrderStatus { get; set; }
 
@@ -31,6 +32,7 @@ namespace Hridhayconnect.Models
         public int? VariantId { get; set; }
         public int? ProductId { get; set; }
         public string? VariantName { get; set; }
+        public string? VariantAttributes { get; set; }
         public string? ProductName { get; set; }
         public int? Quantity { get; set; }
 

@@ -33,9 +33,13 @@ namespace Hridhayconnect.Models
         public string PostalCode { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public string AddressType { get; set; } = string.Empty;
+        public string? AlternativeMobileNo { get; set; }
+        public string? CustomerName { get; set; }
+        public string? ReferralCode { get; set; } // New add
 
-        [NotMapped] public List<CustomerAddress>? AddressList { get; set; }
-        [NotMapped] public List<CustomerCart>? CartList { get; set; }
+        //commont form vishal
+        //[NotMapped] public List<CustomerAddress>? AddressList { get; set; }
+        //[NotMapped] public List<CustomerCart>? CartList { get; set; }
         public bool IsActive { get; set; }
         public bool? IsDeleted { get; set; }
 

@@ -20,8 +20,10 @@ namespace Hridhayconnect.Controllers
         }
 
         // pass nothing SHow main Listing
-        //pass Id=-2 Show All varinat  not Sure what is using
+        //pass Id=-2 Show All ProductWithVarinat  not Sure what is using
         //pass Id=-1 pending for result 
+
+        //1. for adamin pass id=0 for listing
         [HttpPost("[Action]")]
         public async Task<IActionResult> GetAll(ProductPagingRequest request)
         {

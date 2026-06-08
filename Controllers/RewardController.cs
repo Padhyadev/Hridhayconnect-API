@@ -120,10 +120,7 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<IActionResult> AdminAddRewardCoins(
-    int customerId,
-    decimal coins,
-    string remarks)
+        public async Task<IActionResult> AdminAddRewardCoins(int customerId,decimal coins,string remarks)
         {
             try
             {

@@ -6,6 +6,7 @@ using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
 using Hridhayconnect.ServiceRepository.CouponRepository;
 using Hridhayconnect.ServiceRepository.CustomerRepository;
 using Hridhayconnect.ServiceRepository.DashboardRepository;
+using Hridhayconnect.ServiceRepository.HomePageRepository;
 using Hridhayconnect.ServiceRepository.HomeRepository;
 using Hridhayconnect.ServiceRepository.InquiryRepository;
 using Hridhayconnect.ServiceRepository.LovRepository;
@@ -136,6 +137,7 @@ builder.Services.AddScoped<IReviewsRepository,ReviewsRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IRewardRepository, RewardRepository>();
 builder.Services.AddScoped<IOrderRewardSlabRepository, OrderRewardSlabRepository>();
+builder.Services.AddScoped<IHomePageRepository, HomePageRepository>();
 builder.Services.AddScoped<ValidationService>();
 
 

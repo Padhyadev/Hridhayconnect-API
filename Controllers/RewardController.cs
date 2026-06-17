@@ -19,13 +19,13 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<IActionResult> CustomerGetAll(RewardHistoryPagingRequest request)
+        public async Task<IActionResult> CustomerGetAll(RewardHistoryPagingRequest request, int? customerId)
         {
             try
             {
 
 
-                var data = await _repository.GetRewardHistory(request);
+                var data = await _repository.GetRewardHistory(request,customerId);
 
                 CommonViewModel.IsSuccess = true;
                 CommonViewModel.StatusCode = ResponseStatusCode.Success;

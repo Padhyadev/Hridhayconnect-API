@@ -274,7 +274,8 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
                     }
                 }
 
-                string imagesString = string.Join("||", productImages);
+                string imagesString = string.Join("~", productImages);
+
                 List<string> productVariant = new List<string>();
                 if (product.ProductVariantMapping != null && product.ProductVariantMapping.Any(x => x.ProductVariantDetails != null))
                 {
@@ -290,12 +291,25 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
                             variantImage = await FileUploadService.UploadImageAsync(file, uploadFolder);
                         }
 
-                        productVariant.Add($"{product.ProductVariantMapping[i].Id}|{string.Join("=", product.ProductVariantMapping[i].ProductVariantDetails.Select(x => x.AttributeValueName).ToArray())}|" +
-                                            $"{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}");
+                        //productVariant.Add($"{product.ProductVariantMapping[i].Id}|{string.Join("=", product.ProductVariantMapping[i].ProductVariantDetails.Select(x => x.AttributeValueName).ToArray())}|" +
+                        //                    $"{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}");
+
+                        var attributeString = string.Join("=",
+                            product.ProductVariantMapping[i]
+                                   .ProductVariantDetails
+                                   .Where(x => x.AttributeId.HasValue && x.AttributeValueId.HasValue)
+                                   .Select(x => $"{x.AttributeId.Value}-{x.AttributeValueId.Value}")
+                        );
+
+                        productVariant.Add(
+                            $"{product.ProductVariantMapping[i].Id}|{attributeString}|{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}"
+                        );
                     }
                 }
 
-                string variantString = string.Join("||", productVariant);
+                string variantString = string.Join("~", productVariant);
+                Console.WriteLine("Variant String:");
+                Console.WriteLine(variantString);
                 List<SqlParameter> oParams = new()
                 {
                     new SqlParameter("Id", product.Id),

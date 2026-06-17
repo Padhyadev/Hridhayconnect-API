@@ -7,13 +7,13 @@ namespace Hridhayconnect.ServiceRepository.RewardRepository
 {
     public class RewardRepository : IRewardRepository
     {
-        public async Task<object> GetRewardHistory(RewardHistoryPagingRequest request)
+        public async Task<object> GetRewardHistory(RewardHistoryPagingRequest request,int? customerId)
         {
             try
             {
                 var oParams = new List<SqlParameter>()
                 {
-                    new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+                    new SqlParameter("@CustomerId", customerId),
                     new SqlParameter("@TransactionType",
                         string.IsNullOrWhiteSpace(request.TransactionType)
                         ? DBNull.Value

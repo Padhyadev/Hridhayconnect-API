@@ -16,7 +16,8 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
                     new SqlParameter("@CustomerId", obj.CustomerId),
                     new SqlParameter("@ProductId", obj.ProductId),
                     new SqlParameter("@VariantId", obj.VariantId),
-                    new SqlParameter("@Quantity", obj.Quantity)
+                    new SqlParameter("@Quantity", obj.Quantity),
+                    new SqlParameter("@PackingType",string.IsNullOrWhiteSpace(obj.PackingType) ? DBNull.Value: obj.PackingType)
                 };
 
                 DataTable dt = DataContext.ExecuteStoredProcedure_DataTable("SP_AddToCart", oParams);

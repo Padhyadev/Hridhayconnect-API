@@ -11,7 +11,7 @@
         public int ItemId { get; set; }
         public string RefId { get; set; }
 
-        public List<HomePageComponentItem> Items { get; set; }
+        public List<HomePageComponentItem>? Items { get; set; }
     }
 
     public class HomePageComponentItem

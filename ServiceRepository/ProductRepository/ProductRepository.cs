@@ -59,7 +59,29 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
                     table2.Add(dict);
                 }
             }
+            foreach (var item in table2)
+            {
+                if (item.ContainsKey("ImagePath") &&
+                    item["ImagePath"] != null &&
+                    item["ImagePath"] != DBNull.Value)
+                {
+                    var images = item["ImagePath"].ToString()
+                        .Split('~', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x =>
+                        {
+                            var parts = x.Split('|');
 
+                            return new
+                            {
+                                ImagePath = parts[0],
+                                IsPrimary = parts.Length > 1 && parts[1] == "1"
+                            };
+                        })
+                        .ToList();
+
+                    item["Images"] = images;
+                }
+            }
             var result = new
             {
                 table1 = table1,
@@ -261,17 +283,26 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
                             imagePath = await FileUploadService.UploadImageAsync(imageModel.ImageFile, uploadFolder);
                         }
 
-                        productImages.Add($"{imageModel.Id}|{imagePath}|{(isFirst ? 1 : 0)}|{(imageModel.IsRemove ? 1 : 0)}");
-
+                        // productImages.Add($"{imageModel.Id}|{imagePath}|{(isFirst ? 1 : 0)}|{(imageModel.IsRemove ? 1 : 0)}");
+                        productImages.Add($"{imageModel.Id}|{imagePath}|{(imageModel.IsPrimary ? 1 : 0)}|{(imageModel.IsRemove ? 1 : 0)}");
                         isFirst = false;
                     }
                 }
                 if (product.ProductImages != null)
                 {
-                    foreach (var img in product.ProductImages.Where(x => x.Id > 0 && !productImages.Any(z => z.StartsWith(x.Id.ToString()))))
+                    if (product.ProductImages != null)
                     {
-                        productImages.Add($"{img.Id}|-|{(img.IsPrimary ? 1 : 0)}|{(img.IsRemove ? 1 : 0)}");
+                        foreach (var img in product.ProductImages.Where(x => x.Id > 0 && !productImages.Any(z => z.StartsWith(x.Id.ToString()))))
+                        {
+                            productImages.Add(
+                                $"{img.Id}|-|{(img.IsPrimary ? 1 : 0)}|{(img.IsRemove ? 1 : 0)}"
+                            );
+                        }
                     }
+                    //foreach (var img in product.ProductImages.Where(x => x.Id > 0 && !productImages.Any(z => z.StartsWith(x.Id.ToString()))))
+                    //{
+                    //    productImages.Add($"{img.Id}|-|{(img.IsPrimary ? 1 : 0)}|{(img.IsRemove ? 1 : 0)}");
+                    //}
                 }
 
                 string imagesString = string.Join("~", productImages);
@@ -293,6 +324,39 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
 
                         //productVariant.Add($"{product.ProductVariantMapping[i].Id}|{string.Join("=", product.ProductVariantMapping[i].ProductVariantDetails.Select(x => x.AttributeValueName).ToArray())}|" +
                         //                    $"{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}");
+                        // New add for variant 
+                        var variant = product.ProductVariantMapping[i];
+
+                        decimal? sellPrice = variant.SellPrice;
+                        decimal? discountPercent = variant.DiscountPercent;
+
+                        if (variant.IsPercentagePricing)
+                        {
+                            if (variant.Price.HasValue && discountPercent.HasValue)
+                            {
+                                sellPrice = Math.Round(
+                                    variant.Price.Value -
+                                    ((variant.Price.Value * discountPercent.Value) / 100),
+                                    2
+                                );
+
+                                if (sellPrice < 0)
+                                    sellPrice = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (variant.Price.HasValue &&
+                                sellPrice.HasValue &&
+                                variant.Price.Value > 0)
+                            {
+                                discountPercent = Math.Round(
+                                    ((variant.Price.Value - sellPrice.Value)
+                                    / variant.Price.Value) * 100,
+                                    2
+                                );
+                            }
+                        }
 
                         var attributeString = string.Join("=",
                             product.ProductVariantMapping[i]
@@ -301,9 +365,12 @@ namespace Hridhayconnect.ServiceRepository.ProductRepository
                                    .Select(x => $"{x.AttributeId.Value}-{x.AttributeValueId.Value}")
                         );
 
+                        //productVariant.Add(
+                        //    $"{product.ProductVariantMapping[i].Id}|{attributeString}|{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}"
+                        //);
                         productVariant.Add(
-                            $"{product.ProductVariantMapping[i].Id}|{attributeString}|{product.ProductVariantMapping[i].Price}|{product.ProductVariantMapping[i].SKU}|{variantImage}"
-                        );
+    $"{variant.Id}|{attributeString}|{variant.Price}|{discountPercent}|{sellPrice}|{(variant.IsPercentagePricing ? 1 : 0)}|{variant.SKU}|{variantImage}"
+);
                     }
                 }
 

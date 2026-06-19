@@ -40,7 +40,13 @@ namespace Hridhayconnect.Models
         public int? ReservedStock { get; set; }
 
         public int? TotalStock { get; set; }
+        // new add
 
+        public decimal? DiscountPercent { get; set; }
+
+        public decimal? SellPrice { get; set; }
+
+        public bool IsPercentagePricing { get; set; } = true;
         public List<ProductVariantDetails>? ProductVariantDetails { get; set; }
     }
 

@@ -15,6 +15,7 @@
         public int StatusCode { get; set; }
         public string Message { get; set; }
         public bool IsSuccess { get; set; }
+        public bool IsConfirm { get; set; } = false;
 
         public dynamic Data { get; set; }
         public dynamic Data1 { get; set; }

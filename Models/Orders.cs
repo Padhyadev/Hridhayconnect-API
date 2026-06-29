@@ -13,6 +13,7 @@ namespace Hridhayconnect.Models
         public decimal? DiscountAmount { get; set; }
         public decimal? FinalAmount { get; set; }
         public decimal? CoinDiscountAmount { get; set; }
+        public decimal? DeliveryFee { get; set; }
 
         public string OrderStatus { get; set; }
 

@@ -56,7 +56,7 @@ namespace Hridhayconnect.Controllers
                     var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(
                         JsonConvert.SerializeObject(data.Data)
                     );
-
+                    CommonViewModel.IsConfirm = true;
                     int customerId = Convert.ToInt32(dict["Id"]);
                     var token = GenerateJwtToken(customerId);
                     var message2 = $"{data.Message}|{token}";
@@ -197,7 +197,8 @@ namespace Hridhayconnect.Controllers
                     CommonViewModel.IsSuccess = true;
                     CommonViewModel.StatusCode = ResponseStatusCode.Success;
                     CommonViewModel.Message = data.Message;
-                    CommonViewModel.Data = data.Data;
+                    CommonViewModel.IsConfirm = true;
+                    CommonViewModel.Data = null;
                     var dict = data.Data as IDictionary<string, object>;
                     var newOtp = dict?["OTP"]?.ToString();
 
@@ -242,14 +243,15 @@ namespace Hridhayconnect.Controllers
                     return Ok(CommonViewModel);
                 }
 
-                var data = await _repository.ForgotPassword_VerifyOTP(request.Email, request.Otp);
+                var data = await _repository.ForgotPassword_VerifyOTP(request.Email, request.Otp ?? 0);
 
                 if (data != null && data.Status == 1)
                 {
                     CommonViewModel.IsSuccess = true;
                     CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.IsConfirm = true;
                     CommonViewModel.Message = data.Message;
-                    CommonViewModel.Data = data.Data;
+                    CommonViewModel.Data = null;
                 }
                 else
                 {
@@ -305,7 +307,8 @@ namespace Hridhayconnect.Controllers
                     CommonViewModel.IsSuccess = true;
                     CommonViewModel.StatusCode = ResponseStatusCode.Success;
                     CommonViewModel.Message = data.Message;
-                    CommonViewModel.Data = data.Data;
+                    CommonViewModel.IsConfirm = true;
+                    CommonViewModel.Data = null;
                 }
                 else
                 {
@@ -357,7 +360,7 @@ namespace Hridhayconnect.Controllers
                 {
                     CommonViewModel.IsSuccess = false;
                     CommonViewModel.StatusCode = ResponseStatusCode.Error;
-                    CommonViewModel.Message = "Passwords do not match.";
+                    CommonViewModel.Message = "New Password and Confirm Password do not match.";
 
                     return Ok(CommonViewModel);
                 }
@@ -367,6 +370,7 @@ namespace Hridhayconnect.Controllers
                 {
                     CommonViewModel.IsSuccess = true;
                     CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                    CommonViewModel.IsConfirm = true;
                     CommonViewModel.Message = data.Message;
 
                 }

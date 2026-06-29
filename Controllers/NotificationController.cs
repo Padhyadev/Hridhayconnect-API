@@ -19,7 +19,7 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
-       
+
         public async Task<IActionResult> GetAll(PagingRequest request)
         {
             try
@@ -96,14 +96,12 @@ namespace Hridhayconnect.Controllers
             return Ok(CommonViewModel);
         }
 
-        [HttpPut("[Action]")]
-        public async Task<IActionResult> Read(long id)
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> Read(int id)
         {
             try
             {
-                var (IsSuccess, Message, Id, Extra) =
-                    await _repository.ReadNotification(id);
-
+                var (IsSuccess, Message, Id, Extra) = await _repository.ReadNotification(id);
                 CommonViewModel.IsSuccess = IsSuccess;
                 CommonViewModel.StatusCode = IsSuccess
                     ? ResponseStatusCode.Success
@@ -117,19 +115,15 @@ namespace Hridhayconnect.Controllers
                 CommonViewModel.StatusCode = ResponseStatusCode.Error;
                 CommonViewModel.Message = ex.Message;
             }
-
             return Ok(CommonViewModel);
         }
 
-        [HttpPut("[Action]")]
+        [HttpPost("[Action]")]
         public async Task<IActionResult> ReadAll()
         {
             try
             {
-                var customerId = AppHttpContextAccessor.CustomerId;
-                var (IsSuccess, Message, Id, Extra) =
-                    await _repository.ReadAllNotification(customerId);
-
+                var (IsSuccess, Message, Id, Extra) = await _repository.ReadAllNotification();
                 CommonViewModel.IsSuccess = IsSuccess;
                 CommonViewModel.StatusCode = IsSuccess
                     ? ResponseStatusCode.Success
@@ -143,18 +137,15 @@ namespace Hridhayconnect.Controllers
                 CommonViewModel.StatusCode = ResponseStatusCode.Error;
                 CommonViewModel.Message = ex.Message;
             }
-
             return Ok(CommonViewModel);
         }
 
-        [HttpDelete("[Action]")]
-        public async Task<IActionResult> Delete(long id)
+        [HttpPost("[Action]")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var (IsSuccess, Message, Id, Extra) =
-                    await _repository.DeleteNotification(id);
-
+                var (IsSuccess, Message, Id, Extra) = await _repository.DeleteNotification(id);
                 CommonViewModel.IsSuccess = IsSuccess;
                 CommonViewModel.StatusCode = IsSuccess
                     ? ResponseStatusCode.Success
@@ -168,18 +159,15 @@ namespace Hridhayconnect.Controllers
                 CommonViewModel.StatusCode = ResponseStatusCode.Error;
                 CommonViewModel.Message = ex.Message;
             }
-
             return Ok(CommonViewModel);
         }
 
-        [HttpDelete("[Action]")]
+        [HttpPost("[Action]")]
         public async Task<IActionResult> BulkDelete(string ids)
         {
             try
             {
-                var (IsSuccess, Message, Id, Extra) =
-                    await _repository.BulkDeleteNotification(ids);
-
+                var (IsSuccess, Message, Id, Extra) = await _repository.BulkDeleteNotification(ids);
                 CommonViewModel.IsSuccess = IsSuccess;
                 CommonViewModel.StatusCode = IsSuccess
                     ? ResponseStatusCode.Success
@@ -193,7 +181,6 @@ namespace Hridhayconnect.Controllers
                 CommonViewModel.StatusCode = ResponseStatusCode.Error;
                 CommonViewModel.Message = ex.Message;
             }
-
             return Ok(CommonViewModel);
         }
     }

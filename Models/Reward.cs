@@ -2,6 +2,7 @@
 {
     public class RewardHistoryPagingRequest
     {
+        public int? customerId { get; set; }
         public string? TransactionType { get; set; }
 
         public string? EntryType { get; set; }

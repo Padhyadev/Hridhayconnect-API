@@ -3,6 +3,7 @@ using Hridhayconnect.ServiceRepository.AttributeRepository;
 using Hridhayconnect.ServiceRepository.CartRepository;
 using Hridhayconnect.ServiceRepository.CategoryRepository;
 using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
+using Hridhayconnect.ServiceRepository.CountryRepository;
 using Hridhayconnect.ServiceRepository.CouponRepository;
 using Hridhayconnect.ServiceRepository.CustomerRepository;
 using Hridhayconnect.ServiceRepository.DashboardRepository;
@@ -20,7 +21,9 @@ using Hridhayconnect.ServiceRepository.ProductStockRepository;
 using Hridhayconnect.ServiceRepository.ReviewsRepository;
 using Hridhayconnect.ServiceRepository.RewardRepository;
 using Hridhayconnect.ServiceRepository.RoleRepository;
+using Hridhayconnect.ServiceRepository.StateRepository;
 using Hridhayconnect.ServiceRepository.UserRepository;
+using Hridhayconnect.ServiceRepository.WishlistRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
@@ -138,7 +141,12 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IRewardRepository, RewardRepository>();
 builder.Services.AddScoped<IOrderRewardSlabRepository, OrderRewardSlabRepository>();
 builder.Services.AddScoped<IHomePageRepository, HomePageRepository>();
+builder.Services.AddScoped<IHomePageRepository, HomePageRepository>();
 builder.Services.AddScoped<ValidationService>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+
 
 
 //builder.Services.AddSwaggerGen();
@@ -161,15 +169,26 @@ AppHttpContextAccessor.Configure(
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
+//app.UseSwagger();
+
+//app.UseSwaggerUI(c =>
+//{
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hridhayconnect API V1");
+//});
+
+//app.MapGet("/", () => Results.Redirect("/swagger")); 
 app.UseSwagger();
 
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hridhayconnect API V1");
+    c.RoutePrefix = "swagger"; // https://localhost:7103/swagger
 });
 
-app.MapGet("/", () => Results.Redirect("/swagger")); // check it into live this is working or not 
-
+app.MapGet("/", (HttpContext context) =>
+{
+    return Results.Redirect($"{context.Request.Scheme}://{context.Request.Host}/swagger");
+});
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");

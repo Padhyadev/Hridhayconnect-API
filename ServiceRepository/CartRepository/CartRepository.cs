@@ -146,7 +146,7 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
             return await Task.FromResult(result);
         }
         public async Task<(bool IsSuccess, object Data)> Checkout(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,
-    decimal coinDiscountAmount)
+    decimal coinDiscountAmount, decimal deliveryFee)
         {
             try
             {
@@ -156,6 +156,7 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
             new SqlParameter("@CustomerAddressId", CustomerAddressId),
             new SqlParameter("@UsedCoins", usedCoins),
             new SqlParameter("@CoinDiscountAmount", coinDiscountAmount),
+             new SqlParameter("@DeliveryFee", deliveryFee),
             new SqlParameter("@CreatedBy", createdBy)
         };
 

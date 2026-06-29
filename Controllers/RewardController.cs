@@ -1,6 +1,7 @@
 ﻿using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
 using Hridhayconnect.ServiceRepository.RewardRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,13 +20,13 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<IActionResult> CustomerGetAll(RewardHistoryPagingRequest request, int? customerId)
+        public async Task<IActionResult> CustomerGetAll(RewardHistoryPagingRequest request)
         {
             try
             {
 
 
-                var data = await _repository.GetRewardHistory(request,customerId);
+                var data = await _repository.GetRewardHistory(request);
 
                 CommonViewModel.IsSuccess = true;
                 CommonViewModel.StatusCode = ResponseStatusCode.Success;
@@ -44,7 +45,8 @@ namespace Hridhayconnect.Controllers
 
         //Chnage into here Show here also customer wise 
         [HttpGet("[Action]")]
-        public async Task<IActionResult> AdminGetAll()
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll()
         {
             try
             {

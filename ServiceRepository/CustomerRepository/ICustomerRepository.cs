@@ -9,7 +9,7 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
 
         Task<Customer?> GetCustomerById(int id);
 
-        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> AddOrUpdateCustomer(Customer customer);
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> AddOrUpdateCustomeradress(Customer customer);
 
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> RemoveCustomerAddress(long id);
         //Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> SaveCategory(Category category);

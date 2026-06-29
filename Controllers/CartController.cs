@@ -102,11 +102,11 @@ namespace Hridhayconnect.Controllers
         }
         [HttpPost("[Action]")]
         //check it
-        public async Task<IActionResult> CheckOut(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,decimal coinDiscountAmount)
+        public async Task<IActionResult> CheckOut(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,decimal coinDiscountAmount, decimal deliveryFee)
         {
             try
             {
-                var (IsSuccess, data) = await _repository.Checkout(customerId, createdBy,CustomerAddressId,usedCoins,coinDiscountAmount);
+                var (IsSuccess, data) = await _repository.Checkout(customerId, createdBy,CustomerAddressId,usedCoins,coinDiscountAmount,deliveryFee);
 
                 if (IsSuccess)
                 {
@@ -163,6 +163,7 @@ namespace Hridhayconnect.Controllers
                     decimal? DiscountAmount = orderData.DiscountAmount;
                     decimal? CoinDiscountAmount = orderData.CoinDiscountAmount;
                     decimal? FinalAmount = orderData.FinalAmount;
+                    decimal? DeliveryFee = orderData.DeliveryFee;
 
                     await Common.SendEmailwithAttachment(
       $"Order Status Updated - {orderData.OrderNumber}",
@@ -179,6 +180,7 @@ namespace Hridhayconnect.Controllers
           totalamount = TotalAmount,
           discountamount = DiscountAmount,
           coindiscountamount = CoinDiscountAmount,
+          deliveryfee = DeliveryFee,
           finalamount = FinalAmount
       })
   );

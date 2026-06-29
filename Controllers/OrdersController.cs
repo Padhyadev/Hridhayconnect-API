@@ -254,7 +254,7 @@ namespace Hridhayconnect.Controllers
         }
 
         [HttpPost("[Action]")]
-        public async Task<IActionResult> UpdateChnageStatus(int id, string status)
+        public async Task<IActionResult> UpdateChnageStatus(int id, string status, string? reason = null)
         {
             try
             {
@@ -262,6 +262,18 @@ namespace Hridhayconnect.Controllers
                 {
                     CommonViewModel.IsSuccess = false;
                     CommonViewModel.Message = "Please select at least one order.";
+
+                    return Ok(CommonViewModel);
+                }
+                if ((status == "8" || status == "9") &&
+       string.IsNullOrWhiteSpace(reason))
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message =
+                        status == "8"
+                        ? "Please enter cancellation reason."
+                        : "Please enter return reason.";
 
                     return Ok(CommonViewModel);
                 }

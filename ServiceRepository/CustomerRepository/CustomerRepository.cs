@@ -165,7 +165,7 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
             return (TModel)Convert.ChangeType(row[columnName], targetType);
         }
 
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> AddOrUpdateCustomer(Customer customer)
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> AddOrUpdateCustomeradress(Customer customer)
         {
             try
             {
@@ -173,6 +173,8 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
         {
             new SqlParameter("@Id", customer.Id),
             new SqlParameter("@CustomerId", customer.CustomerId),
+            new SqlParameter("@CountryId", customer.CountryId),
+            new SqlParameter("@StateId", customer.StateId),
             new SqlParameter("@AddressLine1", customer.AddressLine1 ?? (object)DBNull.Value),
             new SqlParameter("@AddressLine2", customer.AddressLine2 ?? (object)DBNull.Value),
             new SqlParameter("@City", customer.City ?? (object)DBNull.Value),
@@ -183,7 +185,7 @@ namespace Hridhayconnect.ServiceRepository.CustomerRepository
             new SqlParameter("@AlternativeMobileNo", customer.AlternativeMobileNo ?? (object)DBNull.Value),
             new SqlParameter("@AddressType", customer.AddressType ?? (object)DBNull.Value),
             new SqlParameter("@Mode", "SAVE"),
-            new SqlParameter("@Operated_By", customer.Id == 0 ? customer.CreatedBy : customer.LastModifiedBy)
+            new SqlParameter("@Operated_By",  customer.CustomerId)
         };
 
                 var result = DataContext.ExecuteStoredProcedure(

@@ -129,85 +129,107 @@ namespace Hridhayconnect.ServiceRepository.NotificationRepository
             }
         }
 
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadNotification(long id)
+        // New for Read
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)>
+    ReadNotification(int id)
         {
             try
             {
                 List<SqlParameter> oParams = new()
-                {
-                    new SqlParameter("@Id", id),
-                    new SqlParameter("@Mode", "READ"),
-                    new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
-                };
+        {
+            new SqlParameter("@Id", id),
+            new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+            new SqlParameter("@Ids", DBNull.Value),
+            new SqlParameter("@Mode", "READ"),
+            new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
+        };
 
-                var result = DataContext.ExecuteStoredProcedure("SP_Notification_Master", oParams, true);
+                var result = DataContext.ExecuteStoredProcedure(
+                    "SP_Notification_Master",
+                    oParams,
+                    true);
 
                 return await Task.FromResult(result);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
         }
-
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadAllNotification(long customerId)
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)>
+    ReadAllNotification()
         {
             try
             {
                 List<SqlParameter> oParams = new()
-                {
-                    new SqlParameter("@CustomerId", customerId),
-                    new SqlParameter("@Mode", "READALL"),
-                    new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
-                };
+        {
+            new SqlParameter("@Id", 0),
+            new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+            new SqlParameter("@Ids", DBNull.Value),
+            new SqlParameter("@Mode", "READALL"),
+            new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
+        };
 
-                var result = DataContext.ExecuteStoredProcedure("SP_Notification_Master", oParams, true);
+                var result = DataContext.ExecuteStoredProcedure(
+                    "SP_Notification_Master",
+                    oParams,
+                    true);
 
                 return await Task.FromResult(result);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
         }
-
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> DeleteNotification(long id)
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)>
+    DeleteNotification(int id)
         {
             try
             {
                 List<SqlParameter> oParams = new()
-                {
-                    new SqlParameter("@Id", id),
-                    new SqlParameter("@Mode", "DELETE"),
-                    new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
-                };
+        {
+            new SqlParameter("@Id", id),
+            new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+            new SqlParameter("@Ids", DBNull.Value),
+            new SqlParameter("@Mode", "DELETE"),
+            new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
+        };
 
-                var result = DataContext.ExecuteStoredProcedure("SP_Notification_Master", oParams, true);
+                var result = DataContext.ExecuteStoredProcedure(
+                    "SP_Notification_Master",
+                    oParams,
+                    true);
 
                 return await Task.FromResult(result);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
         }
-
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> BulkDeleteNotification(string ids)
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)>
+    BulkDeleteNotification(string ids)
         {
             try
             {
                 List<SqlParameter> oParams = new()
-                {
-                    new SqlParameter("@Ids", ids),
-                    new SqlParameter("@Mode", "BULKDELETE"),
-                    new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
-                };
+        {
+            new SqlParameter("@Id", 0),
+            new SqlParameter("@CustomerId", AppHttpContextAccessor.CustomerId),
+            new SqlParameter("@Ids", ids),
+            new SqlParameter("@Mode", "BULKDELETE"),
+            new SqlParameter("@OperatedBy", AppHttpContextAccessor.CustomerId)
+        };
 
-                var result = DataContext.ExecuteStoredProcedure("SP_Notification_Master", oParams, true);
+                var result = DataContext.ExecuteStoredProcedure(
+                    "SP_Notification_Master",
+                    oParams,
+                    true);
 
                 return await Task.FromResult(result);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }

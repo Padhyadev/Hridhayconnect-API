@@ -101,6 +101,7 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
                         CustomerEmail = dr["CustomerEmail"]?.ToString(),
                         DiscountAmount = Convert.ToDecimal(dr["DiscountAmount"]),
                         FinalAmount = Convert.ToDecimal(dr["FinalAmount"]),
+                        DeliveryFee = Convert.ToDecimal(dr["DeliveryFee"]),
                         IsActive = Convert.ToBoolean(dr["IsActive"]),
 
                     };
@@ -273,7 +274,7 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
                 return (false, ex.Message, 0, new List<string>());
             }
         }
-        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatusNew(int Id, string status)
+        public async Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> UpdateStatusNew(int Id, string status, string? reason = null)
         {
             try
             {
@@ -291,8 +292,10 @@ namespace Hridhayconnect.ServiceRepository.OrdersRepository
           //      oParams.Add(new SqlParameter("OrderItems", orderItemsTable));
                 oParams.Add(new SqlParameter("IsActive", DBNull.Value));
                 oParams.Add(new SqlParameter("NewStatus", status ?? (object)DBNull.Value));
+                // NEW
+                oParams.Add(new SqlParameter("Reason", string.IsNullOrWhiteSpace(reason) ? DBNull.Value: reason));
                 oParams.Add(new SqlParameter("Mode", "STATUS2"));
-                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId));
+                oParams.Add(new SqlParameter("OperatedBy", AppHttpContextAccessor.JwtUserId > 0 ? AppHttpContextAccessor.JwtUserId : AppHttpContextAccessor.CustomerId));
 
                 return await Task.Run(() =>
                     DataContext.ExecuteStoredProcedure(

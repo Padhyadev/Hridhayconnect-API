@@ -6,6 +6,8 @@ namespace Hridhayconnect.Models
     public class Customer : EntityBase
     {
         public int Id { get; set; }
+        public long? CountryId { get; set; }
+        public long? StateId { get; set; }
 
         public int CustomerId { get; set; }
 
@@ -16,6 +18,7 @@ namespace Hridhayconnect.Models
         public string MobileNo { get; set; } = string.Empty;
 
         public string? Password { get; set; }
+        public string? ConformpasswordPassword { get; set; }
         public bool IsPassword_Reset { get; set; }
 
         public DateTime? DateOfBirth { get; set; }

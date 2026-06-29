@@ -11,11 +11,12 @@ namespace Hridhayconnect.ServiceRepository.NotificationRepository
 
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> SaveNotification(Notification notification);
 
-        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadNotification(long id);
+        // New
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadNotification(int id);
 
-        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadAllNotification(long customerId);
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> ReadAllNotification();
 
-        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> DeleteNotification(long id);
+        Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> DeleteNotification(int id);
 
         Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> BulkDeleteNotification(string ids);
     }

@@ -5,7 +5,7 @@ namespace Hridhayconnect.ServiceRepository.RewardRepository
 {
     public interface IRewardRepository
     {
-        Task<object> GetRewardHistory(RewardHistoryPagingRequest request, int? customerId);
+        Task<object> GetRewardHistory(RewardHistoryPagingRequest request);
 
         //Task<(bool IsSuccess, string Message, long Id, List<string> Extra)> SaveRewardSettings(RewardSettings obj);
 

@@ -102,11 +102,11 @@ namespace Hridhayconnect.Controllers
         }
         [HttpPost("[Action]")]
         //check it
-        public async Task<IActionResult> CheckOut(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,decimal coinDiscountAmount, decimal deliveryFee)
+        public async Task<IActionResult> CheckOut(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,decimal coinDiscountAmount, decimal deliveryFee, string PaymentMode)
         {
             try
             {
-                var (IsSuccess, data) = await _repository.Checkout(customerId, createdBy,CustomerAddressId,usedCoins,coinDiscountAmount,deliveryFee);
+                var (IsSuccess, data) = await _repository.Checkout(customerId, createdBy,CustomerAddressId,usedCoins,coinDiscountAmount,deliveryFee, PaymentMode);
 
                 if (IsSuccess)
                 {
@@ -242,5 +242,6 @@ namespace Hridhayconnect.Controllers
 
             return Ok(CommonViewModel);
         }
+    
     }
 }

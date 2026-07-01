@@ -1,4 +1,4 @@
-﻿using Hridhayconnect.Infra;
+using Hridhayconnect.Infra;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hridhayconnect.Models
@@ -18,6 +18,12 @@ namespace Hridhayconnect.Models
         public string OrderStatus { get; set; }
 
         public string PaymentStatus { get; set; }
+        
+        // Razorpay Checkout Transaction details
+        public string? RazorpayOrderId { get; set; }
+        public string? RazorpayPaymentId { get; set; }
+        public string? RazorpaySignature { get; set; }
+        
         public bool IsActive { get; set; }
 
         public List<OrderItems> ListOrderItems { get; set; }

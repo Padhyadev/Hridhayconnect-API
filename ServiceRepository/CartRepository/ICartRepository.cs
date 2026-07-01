@@ -9,6 +9,6 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
         Task<(bool IsSuccess, long Id)> RemoveCart(CartRequest obj);
         Task<object> ApplyOffersToCart(OfferRequest obj);
         Task<(bool IsSuccess, object Data)> Checkout(int customerId, int createdBy, int CustomerAddressId, decimal usedCoins,
-    decimal coinDiscountAmount, decimal deliveryFee);
+    decimal coinDiscountAmount, decimal deliveryFee, string PaymentMode);
     }
 }

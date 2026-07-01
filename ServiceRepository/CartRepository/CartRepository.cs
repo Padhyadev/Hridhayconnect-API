@@ -20,7 +20,7 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
                     new SqlParameter("@PackingType",string.IsNullOrWhiteSpace(obj.PackingType) ? DBNull.Value: obj.PackingType)
                 };
 
-                DataTable dt = DataContext.ExecuteStoredProcedure_DataTable("SP_AddToCart", oParams);
+                DataTable dt = DataContext.ExecuteStoredProcedure_DataTable("SP_AddToCart_Offersdemo", oParams);
 
 
                 var cartList = new List<Dictionary<string, object>>();
@@ -81,13 +81,13 @@ namespace Hridhayconnect.ServiceRepository.CartRepository
         {
             var oParams = new List<SqlParameter>()
             {
-                 new SqlParameter("@CustomerId", obj.CustomerId),
-            new SqlParameter("@CouponCode", obj.CouponCode),
-            new SqlParameter("@SelectedOfferId", obj.SelectedOfferId),
-            new SqlParameter("@RemoveOfferId", (object?)obj.RemoveOfferId ?? DBNull.Value)
+               new SqlParameter("@CustomerId", obj.CustomerId ?? (object)DBNull.Value),
+               new SqlParameter("@CouponCode", string.IsNullOrWhiteSpace(obj.CouponCode) ? DBNull.Value : obj.CouponCode),
+               new SqlParameter("@SelectedOfferId", obj.SelectedOfferId ?? (object)DBNull.Value),
+               new SqlParameter("@RemoveOfferId", obj.RemoveOfferId ?? (object)DBNull.Value)
             };
 
-            DataSet ds = DataContext.ExecuteStoredProcedure_DataSet("SP_ApplyOffersToCart", oParams);
+            DataSet ds = DataContext.ExecuteStoredProcedure_DataSet("SP_ApplyOffersToCart_demo", oParams);
 
             var table1 = new List<Dictionary<string, object>>();
             var table2 = new List<Dictionary<string, object>>();

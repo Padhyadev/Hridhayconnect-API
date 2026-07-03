@@ -3,6 +3,7 @@ using Hridhayconnect.ServiceRepository.AttributeRepository;
 using Hridhayconnect.ServiceRepository.CartRepository;
 using Hridhayconnect.ServiceRepository.CategoryRepository;
 using Hridhayconnect.ServiceRepository.ChangePasswordRepository;
+using Hridhayconnect.ServiceRepository.ContactUsRepository;
 using Hridhayconnect.ServiceRepository.CountryRepository;
 using Hridhayconnect.ServiceRepository.CouponRepository;
 using Hridhayconnect.ServiceRepository.CustomerRepository;
@@ -16,6 +17,8 @@ using Hridhayconnect.ServiceRepository.MenuRepository;
 using Hridhayconnect.ServiceRepository.NotificationRepository;
 using Hridhayconnect.ServiceRepository.OrderRewardSlabRepository;
 using Hridhayconnect.ServiceRepository.OrdersRepository;
+using Hridhayconnect.ServiceRepository.PaymentRefundRepository;
+using Hridhayconnect.ServiceRepository.PaymentTransactionRepository;
 using Hridhayconnect.ServiceRepository.ProductRepository;
 using Hridhayconnect.ServiceRepository.ProductStockRepository;
 using Hridhayconnect.ServiceRepository.ReviewsRepository;
@@ -147,6 +150,12 @@ builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 
+// New add for RefundPayment
+builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
+builder.Services.AddScoped<IPaymentRefundRepository, PaymentRefundRepository>();
+
+
+builder.Services.AddScoped<IContactUsRepository,ContactUsRepository>();
 
 
 //builder.Services.AddSwaggerGen();

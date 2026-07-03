@@ -83,12 +83,12 @@ namespace Hridhayconnect.Controllers
                     return Ok(CommonViewModel);
                 }
 
-                if (obj.UserId == null || obj.UserId <= 0)
-                {
-                    CommonViewModel.IsSuccess = false;
-                    CommonViewModel.Message = "Please enter user.";
-                    return Ok(CommonViewModel);
-                }
+                //if (obj.UserId == null || obj.UserId <= 0)
+                //{
+                //    CommonViewModel.IsSuccess = false;
+                //    CommonViewModel.Message = "Please enter user.";
+                //    return Ok(CommonViewModel);
+                //}
 
                 if (obj.Rating == null || obj.Rating <= 0)
                 {

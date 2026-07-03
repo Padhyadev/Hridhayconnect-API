@@ -2,6 +2,8 @@ using Hridhayconnect.Infra;
 using Hridhayconnect.Models;
 using Hridhayconnect.ServiceRepository.CartRepository;
 using Hridhayconnect.ServiceRepository.OrdersRepository;
+using Hridhayconnect.ServiceRepository.PaymentRefundRepository;
+using Hridhayconnect.ServiceRepository.PaymentTransactionRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,13 +20,24 @@ namespace Hridhayconnect.Controllers
         private readonly IConfiguration _configuration;
         private readonly ICartRepository _repository;
         private readonly IOrdersRepository _orderrepository;
+        private readonly IPaymentRefundRepository _paymentRefundRepository;
+        private readonly IPaymentTransactionRepository _paymentRepository;
         private readonly ApiResponseModel CommonViewModel = new();
 
-        public PaymentController(IConfiguration configuration, ICartRepository Repository, IOrdersRepository ordersRepository)
+        public PaymentController(IConfiguration configuration,
+            ICartRepository Repository,
+            IOrdersRepository ordersRepository,
+            IPaymentTransactionRepository paymentRepository,
+            IPaymentRefundRepository paymentRefundRepository
+            )
+
+
         {
             _configuration = configuration;
             _repository = Repository;
             _orderrepository = ordersRepository;
+            _paymentRepository = paymentRepository;
+            _paymentRefundRepository = paymentRefundRepository;
         }
 
         [HttpPost("create-order")]
@@ -100,7 +113,7 @@ namespace Hridhayconnect.Controllers
                     request.CustomerAddressId,
                     request.UsedCoins,
                     request.CoinDiscountAmount,
-                    request.DeliveryFee, 
+                    request.DeliveryFee,
                     request.PaymentMode);
 
 
@@ -112,6 +125,19 @@ namespace Hridhayconnect.Controllers
                     string orderNumber = Convert.ToString(result.Items[0]["OrderNumber"]);
 
                     var orderData = await _orderrepository.GetOrderById(orderId);
+
+                    await _paymentRepository.SavePaymentTransaction(new PaymentTransaction
+                    {
+                        OrderId = orderId,
+                        PaymentGateway = "Razorpay",
+                        RazorpayOrderId = request.RazorpayOrderId,
+                        RazorpayPaymentId = request.RazorpayPaymentId,
+                        RazorpaySignature = request.RazorpaySignature,
+                        Amount = orderData.FinalAmount ?? 0,
+                        Currency = "INR",
+                        PaymentStatus = "1",
+                        PaymentResponseLog = JsonConvert.SerializeObject(request)
+                    });
 
                     var newStatus = orderData.OrderStatusName;
 
@@ -165,6 +191,77 @@ namespace Hridhayconnect.Controllers
                 CommonViewModel.StatusCode = ResponseStatusCode.Success;
                 CommonViewModel.Message = IsSuccess.ToString();
                 CommonViewModel.Data = data;
+
+                return Ok(CommonViewModel);
+            }
+            catch (Exception ex)
+            {
+                CommonViewModel.IsSuccess = false;
+                CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                CommonViewModel.Message = ex.Message;
+
+                return Ok(CommonViewModel);
+            }
+        }
+
+        [HttpPost("refund")]
+        public async Task<IActionResult> Refund([FromBody] RefundRequest request)
+        {
+            try
+            {
+                var payment = await _paymentRepository
+                    .GetPaymentTransactionByOrderId(request.OrderId);
+
+                if (payment == null)
+                {
+                    CommonViewModel.IsSuccess = false;
+                    CommonViewModel.StatusCode = ResponseStatusCode.Error;
+                    CommonViewModel.Message = "Payment not found.";
+
+                    return Ok(CommonViewModel);
+                }
+
+                RazorpayClient client = new RazorpayClient(
+                    _configuration["Razorpay:Key"],
+                    _configuration["Razorpay:Secret"]);
+
+                Payment razorPayment = client.Payment.Fetch(payment.RazorpayPaymentId);
+
+                Dictionary<string, object> options = new();
+
+                options.Add("amount",
+                    Convert.ToInt32(request.RefundAmount * 100));
+
+                Refund refund = razorPayment.Refund(options);
+
+                Console.WriteLine(refund.Attributes.ToString());
+
+                await _paymentRefundRepository.SaveRefund(new PaymentRefund
+                {
+                    PaymentTransactionId = payment.Id,
+
+                    RazorpayRefundId = refund.Attributes["id"]?.ToString(),
+
+                    RefundAmount = request.RefundAmount,
+
+                    RefundStatus = refund.Attributes["status"]?.ToString(),
+
+                    RefundReason = request.RefundReason,
+
+                    RefundResponseLog = refund.Attributes.ToString(),
+
+                    RefundDate = DateTime.Now
+                });
+
+                await _paymentRepository.UpdatePaymentStatus(
+                    payment.Id,
+                    "Refunded");
+
+                CommonViewModel.IsSuccess = true;
+                CommonViewModel.StatusCode = ResponseStatusCode.Success;
+                CommonViewModel.Message = "Refund Successful.";
+
+                CommonViewModel.Data = refund.Attributes;
 
                 return Ok(CommonViewModel);
             }
